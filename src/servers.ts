@@ -34,7 +34,7 @@ export class ServersExplorer {
 
                 currentPanel.webview.onDidReceiveMessage(
                     message => {
-                        console.log(message.command);
+                        console.log(message);
                         if (currentPanel) {
                             if (message.close) {
                                 currentPanel.dispose();
