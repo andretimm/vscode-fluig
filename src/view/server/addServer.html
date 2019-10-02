@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>${d.css}</title>
+</head>
+
+<body>
+    <h1>Teste</h1>
+    <button onclick="saveServer()">Retorno</button>
+</body>
+
+<script>
+    const vscode = acquireVsCodeApi();
+    function saveServer(close = true) {
+
+        vscode.postMessage({
+            command: 'saveServer',
+            address: 'addressID',
+            serverName: 'serverNameID',
+            port: 'portID',
+            'close': close
+        });
+    }
+</script>
+
+</html>
