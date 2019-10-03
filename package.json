@@ -74,6 +74,7 @@
 		"vscode-test": "^1.2.0"
 	},
 	"dependencies": {
+		"strip-json-comments": "^3.0.1",
 		"template-literal": "^1.0.3"
 	}
 }
