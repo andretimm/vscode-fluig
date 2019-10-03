@@ -63,11 +63,11 @@
   background: #42a1db;
 }
 
-max-width: 280px;
+/*max-width: 280px;
 display: flex;
 flex-direction: column;
 align-items: stretch;
-}
+}*/
 
 .container .inputs label {
   font-size: 18px;

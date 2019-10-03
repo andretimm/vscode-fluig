@@ -53,7 +53,7 @@ export default class Utils {
 
             let serversJson = Utils.getServerConfigFile();
 
-            fs.writeFileSync(serversJson, JSON.stringify(sampleServer, null, "\t"), (err:) => {
+            fs.writeFileSync(serversJson, JSON.stringify(sampleServer, null, "\t"), (err) => {
                 if (err) {
                     console.error(err);
                 }

@@ -40,7 +40,6 @@ export class ServerItemProvider implements vscode.TreeDataProvider<ServerItem | 
                 return Promise.resolve(element.environments);
             }
             else {
-
                 const servers = Utils.getServersConfig();
                 const listOfEnvironments = servers.configurations[element.id].environments;
                 if (listOfEnvironments.size > 0) {
@@ -61,14 +60,13 @@ export class ServerItemProvider implements vscode.TreeDataProvider<ServerItem | 
                 }
             }
         } else {
-            if (!this.localServerItems) {
+            if (this.localServerItems.length <= 0) {
                 const serverConfig = Utils.getServersConfig();
                 if (serverConfig.configurations.length <= 0) { //se o servers.json existe
-                    
+
                 } else {
                     this.localServerItems = this.setConfigWithServerConfig();
                 }
-
             }
         }
 
@@ -108,7 +106,7 @@ export class ServerItemProvider implements vscode.TreeDataProvider<ServerItem | 
                 if (filename && eventType === 'change') {
                     if (serverConfig.configurations.length > 0) {
                         this.localServerItems = this.setConfigWithServerConfig();
-                    } 
+                    }
                     this.refresh();
                 }
             });
