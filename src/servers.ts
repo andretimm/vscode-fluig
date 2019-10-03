@@ -45,24 +45,23 @@ export class ServerItemProvider implements vscode.TreeDataProvider<ServerItem | 
                 const listOfEnvironments = servers.configurations[element.id].environments;
                 if (listOfEnvironments.size > 0) {
                     treeDataProvider.localServerItems[element.id].environments = listOfEnvironments.map(env => new EnvSection(env, element.label, vscode.TreeItemCollapsibleState.None, {
-                        command: 'totvs_server.selectEnvironment',
+                        command: 'vs-fluig.selectEnvironment',
                         title: '',
                         arguments: [env]
                     }));
                     treeDataProvider.localServerItems[element.id].collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
-                    //Workaround: Bug que nao muda visualmente o collapsibleState se o label permanecer intalterado
                     treeDataProvider.localServerItems[element.id].label = treeDataProvider.localServerItems[element.id].label.endsWith(' ') ? treeDataProvider.localServerItems[element.id].label.trim() : treeDataProvider.localServerItems[element.id].label + ' ';
                     treeDataProvider.refresh();
                     element.environments = listOfEnvironments;
-                    Promise.resolve(new EnvSection(element.label, element.currentEnvironment, element.collapsibleState, undefined, listOfEnvironments));
+                    Promise.resolve(new EnvSection(element.label, element.currentEnvironment, element.collapsibleState, element.command, listOfEnvironments));
                 }
                 else {
                     return Promise.resolve([]);
                 }
             }
-        } else {
-            if (this.localServerItems.length <= 0) {
-                const serverConfig = Utils.getServersConfig();
+        } else {            
+            if (this.localServerItems.length <= 0) {                
+                //const serverConfig = Utils.getServersConfig();
                 this.localServerItems = this.setConfigWithServerConfig();
             }
         }
@@ -117,9 +116,9 @@ export class ServerItemProvider implements vscode.TreeDataProvider<ServerItem | 
         const serverConfig = Utils.getServersConfig();
         const serverItem = (serverItem: string, serverHost: string, serverPort: number, id: string, buildVersion: string, environments: Array<EnvSection>): ServerItem => {
             return new ServerItem(serverItem, serverHost, serverPort, vscode.TreeItemCollapsibleState.None, id, buildVersion, environments, {
-                command: '',
+                command: 'vs-fluig.selectEnvironment',
                 title: '',
-                arguments: [serverItem]
+                arguments: [id]
             });
         };
         const listServer = new Array<ServerItem>();
@@ -129,7 +128,7 @@ export class ServerItemProvider implements vscode.TreeDataProvider<ServerItem | 
             if (element.environments) {
                 element.environments.forEach(environment => {
                     const env = new EnvSection(environment, element.name, vscode.TreeItemCollapsibleState.None,
-                        { command: 'totvs_server.selectEnvironment', title: '', arguments: [environment] }, environment);
+                        { command: 'vs-fluig.selectEnvironment', title: '', arguments: [environment] }, environment);
                     environmentsServer.push(env);
                 });
             }
@@ -139,43 +138,6 @@ export class ServerItemProvider implements vscode.TreeDataProvider<ServerItem | 
         });
 
         return listServer;
-    }
-
-    private saveServers(serverItems: ServerItem[]) {
-        Utils.createServerConfig();
-
-        serverItems.forEach(element => {
-			/*const id = */Utils.createNewServer("totvs_server_protheus", element, element.buildVersion);
-
-            //A principio parece ser um exagero tentar validar TODOS os servidores ao salvar.
-            //Caso essa informação venha do ini do smartclient por exemplo, pode ter um numero muito
-            //grande de servidores cadastrados e esse processo fica bastante lento, pois caso o usuario peça
-            //para conectar um servidor, o LS tera que processar todas essas requisições que ja estarao na fila
-            //das mensagens para enfim processar a mensagem de conexão.
-
-            // languageClient.sendRequest('$totvsserver/validation', {
-            // 	validationInfo: {
-            // 		server: element.address,
-            // 		port: element.port
-            // 	}
-            // }).then((validInfoNode: NodeInfo) => {
-            // 	if (id) {
-            // 		Utils.updateBuildVersion(id, validInfoNode.buildVersion);
-            // 	}
-            // 	return;
-            // });
-
-        });
-    }
-
-    private pathExists(p: string): boolean {
-        try {
-            fs.accessSync(p);
-        } catch (err) {
-            return false;
-        }
-
-        return true;
     }
 
 }
@@ -246,6 +208,10 @@ export class ServersExplorer {
         vscode.window.createTreeView('fluig-servers', { treeDataProvider });
 
         vscode.window.registerTreeDataProvider('fluig-servers', treeDataProvider);
+
+        vscode.commands.registerCommand("vs-fluig.selectEnvironment", (item: vscode.TreeItem) => {
+            console.log(item);
+        });
 
         vscode.commands.registerCommand('vs-fluig.connect-server', (serverItem: ServerItem) => {
             vscode.window.showInformationMessage("Connectar server");
