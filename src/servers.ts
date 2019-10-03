@@ -122,8 +122,8 @@ export class ServerItemProvider implements vscode.TreeDataProvider<ServerItem | 
 	 */
     private setConfigWithServerConfig() {
         const serverConfig = Utils.getServersConfig();
-        const serverItem = (serverItem: string, address: string, port: number, id: string, buildVersion: string, environments: Array<EnvSection>): ServerItem => {
-            return new ServerItem(serverItem, address, port, vscode.TreeItemCollapsibleState.None, id, buildVersion, environments, {
+        const serverItem = (serverItem: string, serverHost: string, serverPort: number, id: string, buildVersion: string, environments: Array<EnvSection>): ServerItem => {
+            return new ServerItem(serverItem, serverHost, serverPort, vscode.TreeItemCollapsibleState.None, id, buildVersion, environments, {
                 command: '',
                 title: '',
                 arguments: [serverItem]
@@ -298,8 +298,8 @@ export class ServerItem extends vscode.TreeItem {
 
     constructor(
         public label: string,
-        public readonly address: string,
-        public readonly port: number,
+        public readonly serverHost: string,
+        public readonly serverPort: number,
         public collapsibleState: vscode.TreeItemCollapsibleState,
         public id: string,
         public buildVersion: string,
@@ -310,11 +310,11 @@ export class ServerItem extends vscode.TreeItem {
     }
 
     get tooltip(): string {
-        return `Server=${this.address} | Port=${this.port}`;
+        return `Server=${this.serverHost} | Port=${this.serverPort}`;
     }
 
     get description(): string {
-        return `${this.address}:${this.port}`;
+        return `${this.serverHost}:${this.serverPort}`;
     }
 
     iconPath = {
@@ -329,6 +329,11 @@ const treeDataProvider = new ServerItemProvider();
 export class ServersExplorer {
 
     constructor(context: vscode.ExtensionContext) {
+        vscode.window.createTreeView('fluig-servers', { treeDataProvider });
+
+        vscode.window.registerTreeDataProvider('fluig-servers', treeDataProvider);
+
+
         let currentPanel: vscode.WebviewPanel | undefined = undefined;
 
         vscode.commands.registerCommand("vs-fluig.add-server", () => {

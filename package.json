@@ -10,7 +10,8 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:vs-fluig.add-server"
+		"onCommand:vs-fluig.add-server",
+		"onView:fluig-servers"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
