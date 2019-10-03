@@ -251,7 +251,11 @@ export class ServersExplorer {
             vscode.window.showInformationMessage("Connectar server");
             let ix = treeDataProvider.localServerItems.indexOf(serverItem);
             if (ix >= 0) {
-                const server = Utils.returnServer(serverItem.id);
+                if (treeDataProvider !== undefined) {
+                    connectedServerItem = serverItem;
+                    treeDataProvider.refresh();
+                }
+                /*const server = Utils.returnServer(serverItem.id);
                 if (server) {
                     const url = `${server.address}:${server.port}/webdesk/ECMCompanyService?wsdl`;
                     var args = { companyId: server.company };
@@ -264,7 +268,7 @@ export class ServersExplorer {
                             }
                         });
                     });
-                }
+                }*/
             }
         });
 
