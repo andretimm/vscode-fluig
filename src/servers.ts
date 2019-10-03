@@ -62,11 +62,7 @@ export class ServerItemProvider implements vscode.TreeDataProvider<ServerItem | 
         } else {
             if (this.localServerItems.length <= 0) {
                 const serverConfig = Utils.getServersConfig();
-                if (serverConfig.configurations.length <= 0) { //se o servers.json existe
-
-                } else {
-                    this.localServerItems = this.setConfigWithServerConfig();
-                }
+                this.localServerItems = this.setConfigWithServerConfig();
             }
         }
 
@@ -250,6 +246,12 @@ export class ServersExplorer {
 
         vscode.window.registerTreeDataProvider('fluig-servers', treeDataProvider);
 
+        vscode.commands.registerCommand('vs-fluig.delete-server', (serverItem: ServerItem) => {
+            let ix = treeDataProvider.localServerItems.indexOf(serverItem);
+            if (ix >= 0) {
+                Utils.deleteServer(serverItem.id);
+            }
+        });
 
         let currentPanel: vscode.WebviewPanel | undefined = undefined;
 

@@ -39,7 +39,7 @@ export default class Utils {
         const servers = Utils.getServersConfig();
         if (!servers) {
             const sampleServer = {
-                version: "0.2.0",            
+                version: "0.2.0",
                 permissions: {
                     authorizationtoken: ""
                 },
@@ -84,6 +84,25 @@ export default class Utils {
         });
     }
     /**
+	 * Deleta o servidor logado por ultimo do servers.json
+	 */
+    static deleteServer(id: string) {
+        const allConfigs = Utils.getServersConfig();
+
+        if (allConfigs.configurations) {
+            const configs = allConfigs.configurations;
+
+            configs.forEach(element => {
+                if (element.id === id) {
+                    const index = configs.indexOf(element, 0);
+                    configs.splice(index, 1);
+                    Utils.persistServersInfo(allConfigs);
+                    return;
+                }
+            });
+        }
+    }
+    /**
 	 * Retorna o path completo do servers.json
 	 */
     static getServerConfigFile() {
@@ -113,8 +132,8 @@ export default class Utils {
         }
     }
     /**
- * Retorna o path completo do launch.json
- */
+     * Retorna o path completo do launch.json
+     */
     static getLaunchConfigFile() {
         let rootPath: string = vscode.workspace.rootPath || process.cwd();
 

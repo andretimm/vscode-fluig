@@ -11,6 +11,7 @@
 	],
 	"activationEvents": [
 		"onCommand:vs-fluig.add-server",
+		"onCommand:vs-fluig.delete-server",
 		"onView:fluig-servers"
 	],
 	"main": "./out/extension.js",
@@ -22,6 +23,14 @@
 				"icon": {
 					"light": "resources/light/add.png",
 					"dark": "resources/dark/add.png"
+				}
+			},
+			{
+				"command": "vs-fluig.delete-server",
+				"title": "Deletar Server",
+				"icon": {
+					"light": "resources/light/delete.png",
+					"dark": "resources/dark/delete.png"
 				}
 			}
 		],
@@ -52,6 +61,13 @@
 					"command": "vs-fluig.add-server",
 					"when": "view == fluig-servers",
 					"group": "navigation"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "vs-fluig.delete-server",
+					"when": "view == fluig-servers && viewItem == serverItem",
+					"group": "inline"
 				}
 			]
 		}
