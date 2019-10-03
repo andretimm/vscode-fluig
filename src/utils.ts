@@ -22,6 +22,7 @@ export default class Utils {
                 name: message.serverName,
                 port: parseInt(message.serverPort),
                 address: message.serverHost,
+                company: parseInt(message.company),
                 user: message.serverUser,
                 pass: message.serverPass,
                 buildVersion: buildVersion
@@ -101,6 +102,27 @@ export default class Utils {
                 }
             });
         }
+    }
+    /**
+	 * Deleta o servidor logado por ultimo do servers.json
+	 */
+    static returnServer(id: string) {
+        const allConfigs = Utils.getServersConfig();
+        let server = null;
+        if (allConfigs.configurations) {
+            const configs = allConfigs.configurations;
+
+            configs.forEach(element => {
+                if (element.id === id) {
+                    /*const index = configs.indexOf(element, 0);
+                    configs.splice(index, 1);
+                    Utils.persistServersInfo(allConfigs);*/
+                    server = element;
+                    return element;
+                }
+            });
+        }
+        return server;
     }
     /**
 	 * Retorna o path completo do servers.json

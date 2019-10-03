@@ -4,6 +4,7 @@ import * as path from 'path';
 import Utils from './utils';
 
 const compile = require('template-literal');
+const soap = require('soap');
 
 export let connectedServerItem: ServerItem | undefined;
 
@@ -246,6 +247,27 @@ export class ServersExplorer {
 
         vscode.window.registerTreeDataProvider('fluig-servers', treeDataProvider);
 
+        vscode.commands.registerCommand('vs-fluig.connect-server', (serverItem: ServerItem) => {
+            vscode.window.showInformationMessage("Connectar server");
+            let ix = treeDataProvider.localServerItems.indexOf(serverItem);
+            if (ix >= 0) {
+                const server = Utils.returnServer(serverItem.id);
+                if (server) {
+                    const url = `${server.address}:${server.port}/webdesk/ECMCompanyService?wsdl`;
+                    var args = { companyId: server.company };
+                    soap.createClient(url, function (err, client) {
+                        client.getCompany(args, function (err, result) {
+                            if (err) {
+                                vscode.window.showErrorMessage("Não foi possivel conectar no server.");
+                            } else {
+                                console.log(result);
+                            }
+                        });
+                    });
+                }
+            }
+        });
+
         vscode.commands.registerCommand('vs-fluig.delete-server', (serverItem: ServerItem) => {
             let ix = treeDataProvider.localServerItems.indexOf(serverItem);
             if (ix >= 0) {
@@ -285,7 +307,8 @@ export class ServersExplorer {
                             message.serverHost &&
                             message.serverPort &&
                             message.serverUser &&
-                            message.serverPass) {
+                            message.serverPass &&
+                            message.company) {
                             const typeServer = "vs-fluig-servers";
                             const serverId = createServer(typeServer, message, "", true);
                             //Fecha aba

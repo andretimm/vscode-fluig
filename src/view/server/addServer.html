@@ -23,6 +23,8 @@
             <input type="text" id="server-host" name="server-host" />
             <label>Porta</label>
             <input type="number" id="server-port" name="server-port" />
+            <label>Empresa</label>
+            <input type="number" id="server-company" name="server-company" />
             <label>Usuário</label>
             <input type="text" id="server-user" name="server-user" />
             <label>Senha</label>
@@ -41,12 +43,15 @@
         let serverPort = document.getElementById('server-port').value;
         let serverUser = document.getElementById('server-user').value;
         let serverPass = document.getElementById('server-pass').value;
+        let company = document.getElementById('server-company').value;
         vscode.postMessage({
             serverName: serverName,
             serverHost: serverHost,
             serverPort: serverPort,
             serverUser: serverUser,
-            serverPass: serverPass
+            serverPass: serverPass,
+            company: company
+            
         });
     }
 </script>
