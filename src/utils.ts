@@ -5,7 +5,25 @@ import * as stripJsonComments from 'strip-json-comments';
 
 const homedir = require('os').homedir();
 
+export interface SelectServer {
+    name: string;
+    id: string;
+    token: string;
+    environment: string;
+    environments?: string[];
+}
+
 export default class Utils {
+    /**
+	* Subscrição para evento de seleção de servidor/ambiente.
+	*/
+    static get onDidSelectedServer(): vscode.Event<SelectServer> {
+        return Utils._onDidSelectedServer.event;
+    }
+    /**
+	 * Emite a notificação de seleção de servidor/ambiente
+	 */
+    private static _onDidSelectedServer = new vscode.EventEmitter<SelectServer>();
     /**
 	 * Cria uma nova configuracao de servidor no servers.json
 	 */
@@ -239,4 +257,39 @@ export default class Utils {
 
         return result;
     }
+    /**
+	 * Salva o servidor logado por ultimo.
+	 * @param id Id do servidor logado
+	 * @param token Token que o LS gerou em cima das informacoes de login
+	 * @param name Nome do servidor logado
+	 * @param environment Ambiente utilizado no login
+	 */
+    static saveSelectServer(id: string, token: string, name: string, environment: string, username: string) {
+        const servers = Utils.getServersConfig();
+
+        servers.configurations.forEach(element => {
+            if (element.id === id) {
+                if (element.environments === undefined) {
+                    element.environments = [environment];
+                } else if (element.environments.indexOf(environment) === -1) {
+                    element.environments.push(environment);
+                }
+                element.username = username;
+                element.environment = environment;
+
+                let server: SelectServer = {
+                    'name': element.name,
+                    'id': element.id,
+                    'token': token,
+                    'environment': element.environment
+                };
+                servers.connectedServer = server;
+                servers.lastConnectedServer = server;
+                Utils._onDidSelectedServer.fire(server);
+            }
+        });
+
+        Utils.persistServersInfo(servers);
+    }
+
 }

@@ -13,6 +13,7 @@
 		"onCommand:vs-fluig.add-server",
 		"onCommand:vs-fluig.delete-server",
 		"onCommand:vs-fluig.connect-server",
+		"onCommand:vs-fluig.serverAuthentication",
 		"onView:fluig-servers"
 	],
 	"main": "./out/extension.js",
@@ -33,6 +34,10 @@
 					"light": "resources/light/delete.png",
 					"dark": "resources/dark/delete.png"
 				}
+			},
+			{
+				"command": "vs-fluig.serverAuthentication",
+				"title": "Selecione o Servidor"				
 			},
 			{
 				"command": "vs-fluig.connect-server",

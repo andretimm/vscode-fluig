@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import Utils from './utils';
+import Utils, { SelectServer } from './utils';
+import { fluigStatusBarItem } from './extension';
 
 const compile = require('template-literal');
 const soap = require('soap');
@@ -218,6 +219,7 @@ export class ServersExplorer {
             vscode.window.showInformationMessage("Connectar server");
             let ix = treeDataProvider.localServerItems.indexOf(serverItem);
             if (ix >= 0) {
+                Utils.saveSelectServer(serverItem.id, 'token', serverItem.label, 'environment', 'user');
                 if (treeDataProvider !== undefined) {
                     connectedServerItem = serverItem;
                     treeDataProvider.refresh();
@@ -342,4 +344,14 @@ export class ServersExplorer {
         }
     }
 
+}
+
+export function updateStatusBarItem(selectServer: SelectServer | undefined): void {
+    if (selectServer) {
+        fluigStatusBarItem.text = `${selectServer.name} / ${selectServer.environment}`;
+    } else {
+        fluigStatusBarItem.text = '[ Selecionar servidor/ambiente ]';
+    }
+
+    fluigStatusBarItem.show();
 }
