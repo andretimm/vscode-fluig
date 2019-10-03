@@ -12,6 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(commands.registerCommand("extension.teste", () => { vscode.window.showInformationMessage('Hello World!'); }));
 	context.subscriptions.push(disposable);
 	let viewServer = new ServersExplorer(context);
+	viewServer.refreshItens();
 	if (!viewServer) {
 		console.error('Visão "Servidores" não incializada.');
 	}

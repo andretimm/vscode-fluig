@@ -64,7 +64,7 @@ export class ServerItemProvider implements vscode.TreeDataProvider<ServerItem | 
             if (!this.localServerItems) {
                 const serverConfig = Utils.getServersConfig();
                 if (serverConfig.configurations.length <= 0) { //se o servers.json existe
-                    this.localServerItems = this.setConfigWithSmartClient();
+                    
                 } else {
                     this.localServerItems = this.setConfigWithServerConfig();
                 }
@@ -108,9 +108,7 @@ export class ServerItemProvider implements vscode.TreeDataProvider<ServerItem | 
                 if (filename && eventType === 'change') {
                     if (serverConfig.configurations.length > 0) {
                         this.localServerItems = this.setConfigWithServerConfig();
-                    } else {
-                        this.localServerItems = this.setConfigWithSmartClient();
-                    }
+                    } 
                     this.refresh();
                 }
             });
@@ -148,44 +146,6 @@ export class ServerItemProvider implements vscode.TreeDataProvider<ServerItem | 
         return listServer;
     }
 
-	/**
-	 * Inicia a arvore de servidores lendo o conteudo do smartclient.ini e
-	 * cria o arquivo servers.json
-	 */
-    private setConfigWithSmartClient() {
-        const config = Utils.getLaunchConfig();
-        const configs = config.configurations;
-
-        if (!configs) {
-            return new Array<ServerItem>();
-        }
-
-        let scBinConf;
-        configs.forEach(element => {
-            if (element.type === 'totvs_language_debug') {
-                scBinConf = element.smartclientBin;
-            }
-        });
-
-        if (scBinConf) {
-            const scIniPath = path.join(
-                path.dirname(scBinConf),
-                path.win32.basename(scBinConf, path.extname(scBinConf)) + '.ini'
-            );
-            if (this.pathExists(scIniPath)) {
-                const serverItems = this.getTCPSecsInIniFile(scIniPath);
-                this.saveServers(serverItems);
-                return serverItems;
-            } else {
-                vscode.window.showInformationMessage('launch.json has an invalid smartclientBin configuration.');
-                return new Array<ServerItem>();
-            }
-        } else {
-            vscode.window.showInformationMessage('Add an attribute smartclientBin with a valid SmartClient path and the executable file name on launch.json.');
-            return new Array<ServerItem>();
-        }
-    }
-
     private saveServers(serverItems: ServerItem[]) {
         Utils.createServerConfig();
 
@@ -211,47 +171,6 @@ export class ServerItemProvider implements vscode.TreeDataProvider<ServerItem | 
             // });
 
         });
-    }
-
-	/**
-	 * Given the path to smartclient.ini, read all its TCP Sections.
-	 */
-    private getTCPSecsInIniFile(scIniPath: string): ServerItem[] {
-        if (this.pathExists(scIniPath)) {
-
-            const toTCPSec = (serverItem: string, address: string, port: number, id: string, buildVersion: string): ServerItem => {
-                return new ServerItem(serverItem, address, port, vscode.TreeItemCollapsibleState.None, id, buildVersion, undefined, {
-                    command: 'totvs-developer-studio.selectNode',
-                    title: '',
-                    arguments: [serverItem]
-                });
-            };
-
-            const scIniFileFs = fs.readFileSync(scIniPath, 'utf-8');
-
-            let re = /^\[[^\]\r\n]+](?:\r?\n(?:[^[\r\n].*)?)*/igm;
-            let matches = re.exec(scIniFileFs);
-
-            const tcpSecs = new Array<ServerItem>();
-
-            while ((matches = re.exec(scIniFileFs)) !== null) {
-                let match = matches[0];
-                let address = /^SERVER\s?=(?:\s+)?(.+)/im.exec(match);
-                let port = /^PORT\s?=(?:\s+)?(.+)/im.exec(match);
-
-                if ((address !== null) && (port !== null)) {
-                    let key = /^\[(.+)\]/igm.exec(match);
-
-                    if (key !== null) {
-                        tcpSecs.push(toTCPSec(key[1], address[1], parseInt(port[1]), Utils.generateRandomID(), ""));
-                    }
-                }
-            }
-            this.localServerItems = tcpSecs;
-            return tcpSecs;
-        } else {
-            return [];
-        }
     }
 
     private pathExists(p: string): boolean {
@@ -406,6 +325,12 @@ export class ServersExplorer {
             return serverId;
         }
 
+    }
+
+    refreshItens() {
+        if (treeDataProvider !== undefined) {
+            treeDataProvider.refresh();
+        }
     }
 
 }
