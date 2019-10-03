@@ -37,6 +37,10 @@
 			{
 				"command": "vs-fluig.connect-server",
 				"title": "Conectar"
+			},
+			{
+				"command": "vs-fluig.rename-server",
+				"title": "Renomear"
 			}
 		],
 		"viewsContainers": {
@@ -72,7 +76,12 @@
 				{
 					"command": "vs-fluig.connect-server",
 					"when": "view == fluig-servers && viewItem == serverItem",
-					"group": "AAtotvsServer@1"
+					"group": "AAfluigServer@1"
+				},
+				{
+					"command": "vs-fluig.rename-server",
+					"when": "view == fluig-servers && viewItem == serverItem",
+					"group": "ABfluigServer@2"
 				},
 				{
 					"command": "vs-fluig.delete-server",

@@ -59,8 +59,8 @@ export class ServerItemProvider implements vscode.TreeDataProvider<ServerItem | 
                     return Promise.resolve([]);
                 }
             }
-        } else {            
-            if (this.localServerItems.length <= 0) {                
+        } else {
+            if (this.localServerItems.length <= 0) {
                 //const serverConfig = Utils.getServersConfig();
                 this.localServerItems = this.setConfigWithServerConfig();
             }
@@ -244,6 +244,21 @@ export class ServersExplorer {
                 Utils.deleteServer(serverItem.id);
             }
         });
+
+        vscode.commands.registerCommand('vs-fluig.rename-server', (serverItem: ServerItem) => {
+            let ix = treeDataProvider.localServerItems.indexOf(serverItem);
+            if (ix >= 0) {
+                vscode.window.showInputBox({
+                    placeHolder: "Renomear Server",
+                    value: serverItem.label
+                }).then((newName) => {
+                    if (newName) {
+                        Utils.updateServerName(serverItem.id, newName);
+                    }
+                });
+            }
+
+        })
 
         let currentPanel: vscode.WebviewPanel | undefined = undefined;
 

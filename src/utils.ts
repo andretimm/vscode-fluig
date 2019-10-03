@@ -217,4 +217,26 @@ export default class Utils {
 
         return path.join(rootPath, ".vscode");
     }
+
+    /**
+	 *Atualiza no server.json o nome de um servidor
+	 * @param id ID do server que sera atualizado
+	 * @param newName Novo nome do servidor
+	 */
+    static updateServerName(id: string, newName: string) {
+        let result = false;
+        if (!id || !newName) {
+            return result;
+        }
+        const serverConfig = Utils.getServersConfig();
+        serverConfig.configurations.forEach(element => {
+            if (element.id === id) {
+                element.name = newName;
+                Utils.persistServersInfo(serverConfig);
+                result = true;
+            }
+        });
+
+        return result;
+    }
 }
