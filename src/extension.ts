@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { commands } from 'vscode';
 import { ServersExplorer } from './servers';
+import { exportDataset } from './export/exportDataset';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -11,8 +12,11 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 	context.subscriptions.push(commands.registerCommand("extension.teste", () => { vscode.window.showInformationMessage('Hello World!'); }));
 	context.subscriptions.push(disposable);
+
+	//Exportar dataset
+	context.subscriptions.push(commands.registerCommand('vs-fluig.export-dataset', (args, files) => exportDataset(args, files)));
+
 	let viewServer = new ServersExplorer(context);
-	viewServer.refreshItens();
 	if (!viewServer) {
 		console.error('Visão "Servidores" não incializada.');
 	}

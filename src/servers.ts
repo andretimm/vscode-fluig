@@ -209,6 +209,7 @@ export class ServersExplorer {
 
         vscode.window.registerTreeDataProvider('fluig-servers', treeDataProvider);
 
+        //Evento ao selecionar servidor
         vscode.commands.registerCommand("vs-fluig.selectEnvironment", (item: vscode.TreeItem) => {
             console.log(item);
         });

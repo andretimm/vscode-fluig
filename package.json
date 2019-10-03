@@ -41,6 +41,14 @@
 			{
 				"command": "vs-fluig.rename-server",
 				"title": "Renomear"
+			},
+			{
+				"command": "vs-fluig.export-form",
+				"title": "Exportar Formulário"
+			},
+			{
+				"command": "vs-fluig.export-dataset",
+				"title": "Exportar Dataset"
 			}
 		],
 		"viewsContainers": {
@@ -65,6 +73,20 @@
 			]
 		},
 		"menus": {
+			"explorer/context": [
+				{
+					"when": "explorerResourceIsFolder",
+					"command": "vs-fluig.export-form",
+					"alt": "vs-fluig.export-form",
+					"group": "fluigExport@1"
+				},
+				{
+					"when": "!explorerResourceIsFolder",
+					"command": "vs-fluig.export-dataset",
+					"alt": "vs-fluig.export-dataset",
+					"group": "fluigExport@2"
+				}
+			],
 			"view/title": [
 				{
 					"command": "vs-fluig.add-server",
