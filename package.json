@@ -54,6 +54,10 @@
 			{
 				"command": "vs-fluig.export-dataset",
 				"title": "Exportar Dataset"
+			},
+			{
+				"command": "vs-fluig.export-new-dataset",
+				"title": "Exportar Novo Dataset"
 			}
 		],
 		"viewsContainers": {
@@ -90,6 +94,12 @@
 					"command": "vs-fluig.export-dataset",
 					"alt": "vs-fluig.export-dataset",
 					"group": "fluigExport@2"
+				},
+				{
+					"when": "!explorerResourceIsFolder",
+					"command": "vs-fluig.export-new-dataset",
+					"alt": "vs-fluig.export-new-dataset",
+					"group": "fluigExport@3"
 				}
 			],
 			"view/title": [

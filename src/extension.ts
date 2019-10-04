@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { commands } from 'vscode';
 import { ServersExplorer, updateStatusBarItem } from './servers';
-import { exportDataset } from './export/exportDataset';
+import { exportDataset, exportNewDataset } from './export/exportDataset';
 import Utils from './utils';
 import { serverSelect } from './serverSelect';
 
@@ -33,6 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	//Exportar dataset
 	context.subscriptions.push(commands.registerCommand('vs-fluig.export-dataset', (args, files) => exportDataset(args, files)));
+	context.subscriptions.push(commands.registerCommand('vs-fluig.export-new-dataset', (args, files) => exportNewDataset(args, files)));
 
 	let viewServer = new ServersExplorer(context);
 	if (!viewServer) {
