@@ -217,29 +217,9 @@ export class ServersExplorer {
         });
 
         vscode.commands.registerCommand('vs-fluig.connect-server', (serverItem: ServerItem) => {
-            vscode.window.showInformationMessage("Connectar server");
             let ix = treeDataProvider.localServerItems.indexOf(serverItem);
             if (ix >= 0) {
-                authenticate(serverItem);
-                /* Utils.saveSelectServer(serverItem.id, serverItem.label, 'environment');
-                 if (treeDataProvider !== undefined) {
-                     connectedServerItem = serverItem;
-                     treeDataProvider.refresh();
-                 }*/
-                /*const server = Utils.returnServer(serverItem.id);
-                if (server) {
-                    const url = `${server.address}:${server.port}/webdesk/ECMCompanyService?wsdl`;
-                    var args = { companyId: server.company };
-                    soap.createClient(url, function (err, client) {
-                        client.getCompany(args, function (err, result) {
-                            if (err) {
-                                vscode.window.showErrorMessage("Não foi possivel conectar no server.");
-                            } else {
-                                console.log(result);
-                            }
-                        });
-                    });
-                }*/
+                authenticate(serverItem);                
             }
         });
 
@@ -262,8 +242,7 @@ export class ServersExplorer {
                     }
                 });
             }
-
-        })
+        });
 
         let currentPanel: vscode.WebviewPanel | undefined = undefined;
 
