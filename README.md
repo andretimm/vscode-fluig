@@ -1,10 +1,10 @@
 **yarn version - 1.17.3**
 
-[x] Salvar Servidor
-[x] Conectar ao Servidor
-[ ] Exportar Dataset
-[ ] Exportar Formulário
-[ ] Snippets
+* [x] Salvar Servidor
+* [x] Conectar ao Servidor
+* [ ] Exportar Dataset
+* [ ] Exportar Formulário
+* [ ] Snippets
 
 # FLUIG README
 
