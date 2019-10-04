@@ -258,8 +258,7 @@ export default class Utils {
     }
     /**
 	 * Salva o servidor logado por ultimo.
-	 * @param id Id do servidor logado
-	 * @param token Token que o LS gerou em cima das informacoes de login
+	 * @param id Id do servidor logado	 
 	 * @param name Nome do servidor logado
 	 * @param environment Ambiente utilizado no login
 	 */

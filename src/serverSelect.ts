@@ -1,6 +1,7 @@
 import { ExtensionContext, QuickPickItem } from "vscode";
 import Utils from "./utils";
 import { MultiStepInput } from "./multiStepInput";
+import { authenticate } from "./servers";
 
 export async function serverSelect(context: ExtensionContext, serverParam: any) {
     const TITLE = "Conexão";
@@ -37,7 +38,7 @@ export async function serverSelect(context: ExtensionContext, serverParam: any) 
             shouldResume: shouldResume,
             validate: validateServerName,
         });
-        state.server = pick;        
+        state.server = pick;
     }
 
     function shouldResume() {
@@ -59,8 +60,11 @@ export async function serverSelect(context: ExtensionContext, serverParam: any) 
     async function main() {
         const state = await collectInputs();
         const server = Utils.getServerById((typeof state.server !== 'string') ? (state.server.detail ? state.server.detail : "") : state.server, serversConfig);
-        server.label = server.name; //FIX: quebra-galho necessário para a árvore de servidores        
-        Utils.saveSelectServer(server.id, server.label, 'environment');
+        if (server) {
+            server.label = server.name; //FIX: quebra-galho necessário para a árvore de servidores        
+            //Utils.saveSelectServer(server.id, server.label, 'environment');
+            authenticate(server);
+        }
     }
 
     main();

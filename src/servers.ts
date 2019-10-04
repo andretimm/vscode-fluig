@@ -219,11 +219,12 @@ export class ServersExplorer {
             vscode.window.showInformationMessage("Connectar server");
             let ix = treeDataProvider.localServerItems.indexOf(serverItem);
             if (ix >= 0) {
-                Utils.saveSelectServer(serverItem.id, serverItem.label, 'environment');
-                if (treeDataProvider !== undefined) {
-                    connectedServerItem = serverItem;
-                    treeDataProvider.refresh();
-                }
+                authenticate(serverItem);
+                /* Utils.saveSelectServer(serverItem.id, serverItem.label, 'environment');
+                 if (treeDataProvider !== undefined) {
+                     connectedServerItem = serverItem;
+                     treeDataProvider.refresh();
+                 }*/
                 /*const server = Utils.returnServer(serverItem.id);
                 if (server) {
                     const url = `${server.address}:${server.port}/webdesk/ECMCompanyService?wsdl`;
@@ -344,6 +345,15 @@ export class ServersExplorer {
         }
     }
 
+}
+
+export function authenticate(serverItem: ServerItem) {
+    Utils.saveSelectServer(serverItem.id, serverItem.label, '1.6.2');
+    if (treeDataProvider !== undefined) {
+        connectedServerItem = serverItem;
+        connectedServerItem.currentEnvironment = '1.6.2';
+        treeDataProvider.refresh();
+    }
 }
 
 export function updateStatusBarItem(selectServer: SelectServer | undefined): void {
