@@ -306,7 +306,6 @@ export class ServersExplorer {
                                 currentPanel.dispose();
                             }
                         }
-
                     },
                     undefined,
                     context.subscriptions
@@ -321,14 +320,12 @@ export class ServersExplorer {
             const htmlContent = fs.readFileSync(htmlPath.with({ scheme: 'vscode-resource' }).fsPath);
             const cssContent = fs.readFileSync(cssPath.with({ scheme: 'vscode-resource' }).fsPath);
             let runTemplate = compile(htmlContent);
-
             return runTemplate({ css: cssContent });
         }
 
         //Cria o servidor
         function createServer(typeServer: string, message: any, buildVersion: string, showSucess: boolean): string | undefined {
             const serverId = Utils.createNewServer(typeServer, message, buildVersion);
-
             if (treeDataProvider !== undefined) {
                 treeDataProvider.refresh();
             }
@@ -337,7 +334,6 @@ export class ServersExplorer {
             }
             return serverId;
         }
-
     }
 
     refreshItens() {
@@ -355,17 +351,22 @@ export class ServersExplorer {
 export async function authenticate(serverItem: ServerItem) {
     const serversConfig = Utils.getServersConfig();
     const server = Utils.getServerById(serverItem.id, serversConfig);
-    const fluigVersion = await axios.get(`${server.address}:${server.port}/ecm/api/rest/ecm/studioWorkflowRest/version?username=${server.user}&password=${server.pass}`);
-    if (fluigVersion.status == 200 && fluigVersion.data) {
-        Utils.saveSelectServer(serverItem.id, serverItem.label, fluigVersion.data);
-        if (treeDataProvider !== undefined) {
-            connectedServerItem = serverItem;
-            connectedServerItem.currentEnvironment = fluigVersion.data;
-            treeDataProvider.refresh();
+    try {
+        const fluigVersion = await axios.get(`${server.address}:${server.port}/ecm/api/rest/ecm/studioWorkflowRest/version?username=${server.user}&password=${server.pass}`);
+        if (fluigVersion.status == 200 && fluigVersion.data) {
+            Utils.saveSelectServer(serverItem.id, serverItem.label, fluigVersion.data);
+            if (treeDataProvider !== undefined) {
+                connectedServerItem = serverItem;
+                connectedServerItem.currentEnvironment = fluigVersion.data;
+                treeDataProvider.refresh();
+            }
+        } else {
+            vscode.window.showErrorMessage("Erro ao autenticar no servidor!");
         }
-    }else{
+    } catch (error) {
         vscode.window.showErrorMessage("Erro ao autenticar no servidor!");
     }
+
 }
 
 export function updateStatusBarItem(selectServer: SelectServer | undefined): void {
