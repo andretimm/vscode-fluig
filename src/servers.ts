@@ -4,8 +4,9 @@ import * as path from 'path';
 import Utils, { SelectServer } from './utils';
 import { fluigStatusBarItem } from './extension';
 
+import axios from 'axios';
+
 const compile = require('template-literal');
-const soap = require('soap');
 
 export let connectedServerItem: ServerItem | undefined;
 
@@ -347,12 +348,23 @@ export class ServersExplorer {
 
 }
 
-export function authenticate(serverItem: ServerItem) {
-    Utils.saveSelectServer(serverItem.id, serverItem.label, '1.6.2');
-    if (treeDataProvider !== undefined) {
-        connectedServerItem = serverItem;
-        connectedServerItem.currentEnvironment = '1.6.2';
-        treeDataProvider.refresh();
+/**
+ * Pega versão o servidor
+ * @param serverItem ServerItem
+ */
+export async function authenticate(serverItem: ServerItem) {
+    const serversConfig = Utils.getServersConfig();
+    const server = Utils.getServerById(serverItem.id, serversConfig);
+    const fluigVersion = await axios.get(`${server.address}:${server.port}/ecm/api/rest/ecm/studioWorkflowRest/version?username=${server.user}&password=${server.pass}`);
+    if (fluigVersion.status == 200 && fluigVersion.data) {
+        Utils.saveSelectServer(serverItem.id, serverItem.label, fluigVersion.data);
+        if (treeDataProvider !== undefined) {
+            connectedServerItem = serverItem;
+            connectedServerItem.currentEnvironment = fluigVersion.data;
+            treeDataProvider.refresh();
+        }
+    }else{
+        vscode.window.showErrorMessage("Erro ao autenticar no servidor!");
     }
 }
 

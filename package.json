@@ -37,7 +37,7 @@
 			},
 			{
 				"command": "vs-fluig.serverAuthentication",
-				"title": "Selecione o Servidor"				
+				"title": "Selecione o Servidor"
 			},
 			{
 				"command": "vs-fluig.connect-server",
@@ -147,6 +147,7 @@
 		"vscode-test": "^1.2.0"
 	},
 	"dependencies": {
+		"axios": "^0.19.0",
 		"soap": "^0.29.0",
 		"strip-json-comments": "^3.0.1",
 		"template-literal": "^1.0.3"

@@ -3,6 +3,8 @@ import * as fs from 'fs';
 import Utils from '../utils';
 import { MultiStepInput } from '../multiStepInput';
 
+const soap = require('soap');
+
 export function exportDataset(context: any, files: any) {
     /*if (files) {
         const fileList: string[] = getListOfFiles(files);
@@ -18,20 +20,46 @@ export function exportDataset(context: any, files: any) {
 export async function exportNewDataset(context: any, files: any) {
     const fileList: string[] = getListOfFiles(files);
     if (fileList.length) {
-        const server = Utils.getCurrentServer();
+        const serversConfig = Utils.getServersConfig();
+        const currentServer = Utils.getCurrentServer();
+        const server = Utils.getServerById(currentServer.id, serversConfig);
         if (fileList.length > 1) {
             vscode.window.showErrorMessage("Selecionae apenas um dataset por vez!");
         } else {
-            console.log(server);
-            console.log(await newDatasetDetails(context));
+            const datasetDetail = await newDatasetDetails(context);
+            alreadyExists(datasetDetail.title, server).then((result)=>{
+                if(!result){
+                    console.log("existe");
+                }
+            }).catch((err)=>{
+                console.log("Exite");
+                vscode.window.showErrorMessage("Já existe um dataset com o nome de " + datasetDetail.title);
+            });
         }
     } else {
         vscode.window.showErrorMessage("Nenhum arquivo selecionado");
     }
 }
 
-function alreadyExists(dataset): boolean {
-    return true;
+function alreadyExists(dataset: string, server: any) {
+    if (server) {
+        const url = `${server.address}:${server.port}/webdesk/ECMDatasetService?wsdl`;
+        var args = { companyId: server.company, username: server.user, password: server.pass, name: dataset };
+        return new Promise((accept, reject) => {
+            soap.createClient(url, function (err, client) {
+                client.loadDataset(args, function (err, result) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        accept(true);
+                    }
+                });
+            });
+        })    
+    }
+    return new Promise<boolean>((resolve, reject) => {
+        return false;
+    });
 }
 
 async function newDatasetDetails(context: vscode.ExtensionContext) {
@@ -94,7 +122,7 @@ async function newDatasetDetails(context: vscode.ExtensionContext) {
         return value === '' ? 'Informação requerida' : undefined;
     }
 
-    async function main() {    
+    async function main() {
         return await collectInputs();
     }
 
