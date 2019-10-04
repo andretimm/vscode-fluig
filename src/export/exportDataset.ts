@@ -6,6 +6,7 @@ import { MultiStepInput } from '../multiStepInput';
 const soap = require('soap');
 
 export function exportDataset(context: any, files: any) {
+
     /*if (files) {
         const fileList: string[] = getListOfFiles(files);
         const server = Utils.getCurrentServer();
@@ -26,11 +27,11 @@ export async function exportNewDataset(context: any, files: any) {
         if (fileList.length > 1) {
             vscode.window.showErrorMessage("Selecionae apenas um dataset por vez!");
         } else {
-            const datasetDetail = await newDatasetDetails(context);
+            const datasetDetail = await newDatasetDetails(context, fileList[0].name);
             alreadyExists(datasetDetail.title, server).then((result) => {
                 if (!result) {
                     console.log("n existe");
-                    const content = fs.readFileSync(fileList[0], 'utf8');
+                    const content = fs.readFileSync(fileList[0].path, 'utf8');
                     addDataset(server, datasetDetail.title, datasetDetail.description, content).then((data) => {
                         vscode.window.showInformationMessage(`Dataset ${datasetDetail.title} exportato com sucesso!`);
                     }).catch((err) => {
@@ -47,7 +48,13 @@ export async function exportNewDataset(context: any, files: any) {
     }
 }
 
-
+/**
+ * Cria nov dataset no servidor
+ * @param server Servidor atual
+ * @param title Nome Dataset
+ * @param description Descrição do Dataset
+ * @param content Conteudo do Dataset
+ */
 function addDataset(server: any, title: string, description: string, content: string) {
     const url = `${server.address}:${server.port}/webdesk/ECMDatasetService?wsdl`;
     const args = { companyId: server.company, username: server.user, password: server.pass, name: title, description: description, impl: content };
@@ -92,7 +99,7 @@ function alreadyExists(dataset: string, server: any) {
     });
 }
 
-async function newDatasetDetails(context: vscode.ExtensionContext) {
+async function newDatasetDetails(context: vscode.ExtensionContext, name: string) {
     const TITLE = "Novo Dataset";
 
     interface State {
@@ -119,10 +126,10 @@ async function newDatasetDetails(context: vscode.ExtensionContext) {
             title: TITLE,
             step: TITLE_STEP,
             totalSteps: TOTAL_STEPS,
-            value: '',
+            value: name ? name : '',
             prompt: 'Informe o nome do Dataset',
             shouldResume: shouldResume,
-            validate: validateRequiredValue,
+            validate: validateDatasetNameValue,
             password: false
         });
 
@@ -134,7 +141,7 @@ async function newDatasetDetails(context: vscode.ExtensionContext) {
             title: TITLE,
             step: DESCRIPTION_STEP,
             totalSteps: TOTAL_STEPS,
-            value: '',
+            value: name ? name : '',
             prompt: 'Informe a descrição do Dataset',
             shouldResume: shouldResume,
             validate: validateRequiredValue,
@@ -152,6 +159,18 @@ async function newDatasetDetails(context: vscode.ExtensionContext) {
         return value === '' ? 'Informação requerida' : undefined;
     }
 
+    async function validateDatasetNameValue(value: string) {
+        if (value !== '') {
+            if (value.indexOf(" ") == -1) {
+                return undefined;
+            } else {
+                return 'Não pode conter espaço no nome';
+            }
+        } else {
+            return 'Informação requerida';
+        }
+    }
+
     async function main() {
         return await collectInputs();
     }
@@ -165,20 +184,14 @@ async function newDatasetDetails(context: vscode.ExtensionContext) {
  * @param allFiles Array de arquivos
  */
 function getListOfFiles(allFiles: any[]) {
-    let arrayFiles: string[] = [];
+    let arrayFiles: any[] = [];
     allFiles.forEach(element => {
         if (element.fsPath &&
             (element.fsPath.indexOf(".js") != -1 ||
                 element.fsPath.indexOf(".JS") != -1)) {
 
-            arrayFiles.push(element.fsPath);
+            arrayFiles.push({ path: element.fsPath, name: element.path.split("/").pop().split(".js").shift() });
 
-        } else {
-            if (fs.existsSync(element) &&
-                (element.fsPath.indexOf(".js") != -1 ||
-                    element.fsPath.indexOf(".JS") != -1)) {
-                arrayFiles.push(element);
-            }
         }
     });
     return arrayFiles;
