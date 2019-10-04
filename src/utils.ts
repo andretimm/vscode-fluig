@@ -8,7 +8,7 @@ const homedir = require('os').homedir();
 export interface SelectServer {
     name: string;
     id: string;
-    token: string;
+    token?: string;
     environment: string;
     environments?: string[];
 }
@@ -122,7 +122,7 @@ export default class Utils {
         }
     }
     /**
-	 * Deleta o servidor logado por ultimo do servers.json
+	 * Retorna o servidor logado por ultimo do servers.json
 	 */
     static returnServer(id: string) {
         const allConfigs = Utils.getServersConfig();
@@ -235,7 +235,6 @@ export default class Utils {
 
         return path.join(rootPath, ".vscode");
     }
-
     /**
 	 *Atualiza no server.json o nome de um servidor
 	 * @param id ID do server que sera atualizado
@@ -264,7 +263,7 @@ export default class Utils {
 	 * @param name Nome do servidor logado
 	 * @param environment Ambiente utilizado no login
 	 */
-    static saveSelectServer(id: string, token: string, name: string, environment: string, username: string) {
+    static saveSelectServer(id: string, name: string, environment: string) {
         const servers = Utils.getServersConfig();
 
         servers.configurations.forEach(element => {
@@ -274,13 +273,11 @@ export default class Utils {
                 } else if (element.environments.indexOf(environment) === -1) {
                     element.environments.push(environment);
                 }
-                element.username = username;
                 element.environment = environment;
 
                 let server: SelectServer = {
                     'name': element.name,
-                    'id': element.id,
-                    'token': token,
+                    'id': element.id,                    
                     'environment': element.environment
                 };
                 servers.connectedServer = server;
@@ -291,5 +288,23 @@ export default class Utils {
 
         Utils.persistServersInfo(servers);
     }
-
+    /**
+ 	*Recupera um servidor pelo id informado.
+ 	* @param id id do servidor alvo.
+ 	*/
+	static getServerById(id: string, serversConfig: any) {
+		let server;
+		if (serversConfig.configurations) {
+			const configs = serversConfig.configurations;
+			configs.forEach(element => {
+				if (element.id === id) {
+					server = element;
+					if (server.environments === undefined) {
+						server.environments = [];
+					}
+				}
+			});
+		}
+		return server;
+	}
 }

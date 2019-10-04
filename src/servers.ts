@@ -219,7 +219,7 @@ export class ServersExplorer {
             vscode.window.showInformationMessage("Connectar server");
             let ix = treeDataProvider.localServerItems.indexOf(serverItem);
             if (ix >= 0) {
-                Utils.saveSelectServer(serverItem.id, 'token', serverItem.label, 'environment', 'user');
+                Utils.saveSelectServer(serverItem.id, serverItem.label, 'environment');
                 if (treeDataProvider !== undefined) {
                     connectedServerItem = serverItem;
                     treeDataProvider.refresh();
