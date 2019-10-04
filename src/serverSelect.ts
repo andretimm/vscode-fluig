@@ -61,8 +61,7 @@ export async function serverSelect(context: ExtensionContext, serverParam: any) 
         const state = await collectInputs();
         const server = Utils.getServerById((typeof state.server !== 'string') ? (state.server.detail ? state.server.detail : "") : state.server, serversConfig);
         if (server) {
-            server.label = server.name; //FIX: quebra-galho necessário para a árvore de servidores        
-            //Utils.saveSelectServer(server.id, server.label, 'environment');
+            server.label = server.name; //FIX: quebra-galho necessário para a árvore de servidores                    
             authenticate(server);
         }
     }

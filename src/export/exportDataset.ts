@@ -27,12 +27,18 @@ export async function exportNewDataset(context: any, files: any) {
             vscode.window.showErrorMessage("Selecionae apenas um dataset por vez!");
         } else {
             const datasetDetail = await newDatasetDetails(context);
-            alreadyExists(datasetDetail.title, server).then((result)=>{
-                if(!result){
-                    console.log("existe");
+            alreadyExists(datasetDetail.title, server).then((result) => {
+                if (!result) {
+                    console.log("n existe");
+                    const content = fs.readFileSync(fileList[0], 'utf8');
+                    addDataset(server, datasetDetail.title, datasetDetail.description, content).then((data) => {
+                        vscode.window.showInformationMessage(`Dataset ${datasetDetail.title} exportato com sucesso!`);
+                    }).catch((err) => {
+                        vscode.window.showErrorMessage("Erro ao exportar o Dataset " + datasetDetail.title);
+                    });
+
                 }
-            }).catch((err)=>{
-                console.log("Exite");
+            }).catch((err) => {
                 vscode.window.showErrorMessage("Já existe um dataset com o nome de " + datasetDetail.title);
             });
         }
@@ -41,21 +47,45 @@ export async function exportNewDataset(context: any, files: any) {
     }
 }
 
+
+function addDataset(server: any, title: string, description: string, content: string) {
+    const url = `${server.address}:${server.port}/webdesk/ECMDatasetService?wsdl`;
+    const args = { companyId: server.company, username: server.user, password: server.pass, name: title, description: description, impl: content };
+    return new Promise((accept, reject) => {
+        soap.createClient(url, function (err, client) {
+            client.addDataset(args, function (err, result) {
+                if (err) {
+                    console.log(err);
+                    accept(false);
+                } else {
+                    console.log(result);
+                    accept(true);
+                }
+            });
+        });
+    })
+}
+
+/**
+ * Verifica se ja existe um dataset com este nome
+ * @param dataset Nome do Dataset
+ * @param server Dados do servidor
+ */
 function alreadyExists(dataset: string, server: any) {
     if (server) {
         const url = `${server.address}:${server.port}/webdesk/ECMDatasetService?wsdl`;
-        var args = { companyId: server.company, username: server.user, password: server.pass, name: dataset };
+        const args = { companyId: server.company, username: server.user, password: server.pass, name: dataset };
         return new Promise((accept, reject) => {
             soap.createClient(url, function (err, client) {
                 client.loadDataset(args, function (err, result) {
                     if (err) {
-                        reject(err);
+                        accept(false);
                     } else {
                         accept(true);
                     }
                 });
             });
-        })    
+        });
     }
     return new Promise<boolean>((resolve, reject) => {
         return false;

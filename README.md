@@ -2,8 +2,10 @@
 
 * [x] Salvar Servidor
 * [x] Conectar ao Servidor
+* [ ] Exportar Novo Dataset
 * [ ] Exportar Dataset
 * [ ] Exportar Formulário
+* [ ] Atalhos
 * [ ] Snippets
 
 # FLUIG README
