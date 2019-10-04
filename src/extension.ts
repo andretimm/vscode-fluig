@@ -23,7 +23,13 @@ export function activate(context: vscode.ExtensionContext) {
 	fluigStatusBarItem.command = 'vs-fluig.serverAuthentication';
 	context.subscriptions.push(fluigStatusBarItem);
 	context.subscriptions.push(Utils.onDidSelectedServer(updateStatusBarItem));
-	updateStatusBarItem(undefined);
+	//Inicializa com o servidor selecionado
+	const server = Utils.getCurrentServer();
+	if (server) {
+		updateStatusBarItem(server);
+	} else {
+		updateStatusBarItem(undefined);
+	}
 
 	//Exportar dataset
 	context.subscriptions.push(commands.registerCommand('vs-fluig.export-dataset', (args, files) => exportDataset(args, files)));

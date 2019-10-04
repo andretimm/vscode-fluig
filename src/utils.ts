@@ -276,7 +276,7 @@ export default class Utils {
 
                 let server: SelectServer = {
                     'name': element.name,
-                    'id': element.id,                    
+                    'id': element.id,
                     'environment': element.environment
                 };
                 servers.connectedServer = server;
@@ -291,19 +291,31 @@ export default class Utils {
  	*Recupera um servidor pelo id informado.
  	* @param id id do servidor alvo.
  	*/
-	static getServerById(id: string, serversConfig: any) {
-		let server;
-		if (serversConfig.configurations) {
-			const configs = serversConfig.configurations;
-			configs.forEach(element => {
-				if (element.id === id) {
-					server = element;
-					if (server.environments === undefined) {
-						server.environments = [];
-					}
-				}
-			});
-		}
-		return server;
-	}
+    static getServerById(id: string, serversConfig: any) {
+        let server;
+        if (serversConfig.configurations) {
+            const configs = serversConfig.configurations;
+            configs.forEach(element => {
+                if (element.id === id) {
+                    server = element;
+                    if (server.environments === undefined) {
+                        server.environments = [];
+                    }
+                }
+            });
+        }
+        return server;
+    }
+    /**
+	 * Recupera o ultimo servidor logado
+	 */
+    static getCurrentServer() {
+        const servers = Utils.getServersConfig();
+
+        if (servers.connectedServer.id) {
+            return servers.connectedServer;
+        } else {
+            return "";
+        }
+    }
 }
