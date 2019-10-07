@@ -292,7 +292,7 @@ export class ServersExplorer {
             }
         });
 
-        //Rederiza a view
+        //Renderiza a view
         function getWebViewContent(context: any) {
             const htmlPath = vscode.Uri.file(path.join(context.extensionPath, 'src', 'view', 'server', 'addServer.html'));
             const cssPath = vscode.Uri.file(path.join(context.extensionPath, 'src', 'view', 'server', 'addServer.css'));

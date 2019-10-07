@@ -4,8 +4,8 @@
 * [x] Conectar ao Servidor
 * [x] Exportar Novo Dataset
 * [ ] Exportar Dataset quando ja existir
-* [ ] Importar Dataset
+* [x] Importar Dataset
 * [ ] Exportar Formulário
-* [ ] Importar FOrmulário
+* [ ] Importar Formulário
 * [ ] Atalhos
 * [ ] Snippets
