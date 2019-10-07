@@ -27,20 +27,18 @@ export async function exportDataset(context: any, files: any) {
             vscode.window.showErrorMessage("Selecionae apenas um dataset por vez!");
         } else {
             const datasetDetail = await newDatasetDetails(context, fileList[0].name);
-            alreadyExists(datasetDetail.title, server).then((result) => {
-                if (!result) {
-                    console.log("n existe");
-                    const content = fs.readFileSync(fileList[0].path, 'utf8');
-                    addDataset(server, datasetDetail.title, datasetDetail.description, content).then((data) => {
-                        vscode.window.showInformationMessage(`Dataset ${datasetDetail.title} exportato com sucesso!`);
-                    }).catch((err) => {
-                        vscode.window.showErrorMessage("Erro ao exportar o Dataset " + datasetDetail.title);
-                    });
-
-                }
-            }).catch((err) => {
+            const existdataset = await alreadyExists(datasetDetail.title, server);
+            if (!existdataset) {
+                console.log("n existe");
+                const content = fs.readFileSync(fileList[0].path, 'utf8');
+                addDataset(server, datasetDetail.title, datasetDetail.description, content).then((data) => {
+                    vscode.window.showInformationMessage(`Dataset ${datasetDetail.title} exportato com sucesso!`);
+                }).catch((err) => {
+                    vscode.window.showErrorMessage("Erro ao exportar o Dataset " + datasetDetail.title);
+                });
+            } else {
                 vscode.window.showErrorMessage("Já existe um dataset com o nome de " + datasetDetail.title);
-            });
+            }
         }
     } else {
         vscode.window.showErrorMessage("Nenhum arquivo selecionado");
@@ -48,7 +46,7 @@ export async function exportDataset(context: any, files: any) {
 }
 
 /**
- * Cria nov dataset no servidor
+ * Cria novo dataset no servidor
  * @param server Servidor atual
  * @param title Nome Dataset
  * @param description Descrição do Dataset
