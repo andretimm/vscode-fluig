@@ -33,7 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	//Exportar dataset
 	context.subscriptions.push(commands.registerCommand('vs-fluig.export-dataset', (args, files) => exportDataset(args, files)));
-	context.subscriptions.push(commands.registerCommand('vs-fluig.export-new-dataset', (args, files) => exportNewDataset(args, files)));
+	context.subscriptions.push(commands.registerCommand('vs-fluig.import-dataset', (args, files) => exportNewDataset(args, files)));
 
 	let viewServer = new ServersExplorer(context);
 	if (!viewServer) {

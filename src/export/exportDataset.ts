@@ -5,21 +5,20 @@ import { MultiStepInput } from '../multiStepInput';
 
 const soap = require('soap');
 
-export function exportDataset(context: any, files: any) {
-
-    /*if (files) {
-        const fileList: string[] = getListOfFiles(files);
-        const server = Utils.getCurrentServer();
-        console.log(fileList);
-        console.log(server);
-        //TODO : Exportar dataset
+export async function exportDataset(context: any, files: any) {
+    let editor: vscode.TextEditor | undefined;
+    let fileList: string[] = [];
+    if (context == undefined) {//Identifica quando vem do atalho 
+        editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            vscode.window.showInformationMessage('Nenhum editor está ativo, não é possível encontrar o arquivo atual para exportar.');
+            return;
+        }
+        fileList = getListOfFiles([editor.document.uri]);
     } else {
-        vscode.window.showErrorMessage("Nenhum arquivo selecionado");
-    }*/
-}
+        fileList = getListOfFiles(files)
+    }
 
-export async function exportNewDataset(context: any, files: any) {
-    const fileList: string[] = getListOfFiles(files);
     if (fileList.length) {
         const serversConfig = Utils.getServersConfig();
         const currentServer = Utils.getCurrentServer();

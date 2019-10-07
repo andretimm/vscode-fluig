@@ -52,12 +52,20 @@
 				"title": "Exportar Formulário"
 			},
 			{
-				"command": "vs-fluig.export-dataset",
-				"title": "Exportar Dataset"
+				"command": "vs-fluig.import-dataset",
+				"title": "Importar Dataset"
 			},
 			{
-				"command": "vs-fluig.export-new-dataset",
-				"title": "Exportar Novo Dataset"
+				"command": "vs-fluig.export-dataset",
+				"title": "Exportar Dataset"
+			}
+		],		
+		"keybindings": [
+			{
+				"command": "vs-fluig.export-dataset",
+				"key": "ctrl+f9",
+				"mac": "cmd+f9",
+				"when": "editorTextFocus"
 			}
 		],
 		"viewsContainers": {
@@ -96,10 +104,9 @@
 					"group": "fluigExport@2"
 				},
 				{
-					"when": "!explorerResourceIsFolder",
-					"command": "vs-fluig.export-new-dataset",
-					"alt": "vs-fluig.export-new-dataset",
-					"group": "fluigExport@3"
+					"command": "vs-fluig.import-dataset",
+					"alt": "vs-fluig.import-dataset",
+					"group": "fluigImport@2"
 				}
 			],
 			"view/title": [
