@@ -1,14 +1,77 @@
-import { ExtensionContext, QuickPickItem } from "vscode";
+import { ExtensionContext, QuickPickItem, workspace, window } from "vscode";
+import * as fs from 'fs';
 import Utils from '../utils';
 import { MultiStepInput } from "../multiStepInput";
 
 const soap = require('soap');
 
 export async function importDataset(context: ExtensionContext) {
+    const serversConfig = Utils.getServersConfig();
+    const currentServer = Utils.getCurrentServer();
+    const server = Utils.getServerById(currentServer.id, serversConfig);
     const datasetSelected = await selectDataset(context);
-    console.log(datasetSelected);
+    //TODO : Valiar se tem mais de uma workspace aberta workspace.workspaceFolders
+    const datasetDir = getDatasetDir();
+    const loadedDataset: any = await loadDataset(server, datasetSelected.dataset.label);
+    if (loadedDataset) {
+        if (loadedDataset.dataset.datasetBuilder.indexOf('CustomizedDatasetBuilder') != -1) {
+            fs.writeFileSync(`${datasetDir}\\${datasetSelected.dataset.label}.js`, loadedDataset.dataset.datasetImpl);
+        } else {
+            window.showInformationMessage('Apenas datasets customizados são permitidos!');
+        }
+    } else {
+        window.showErrorMessage('Erro ao carregar dataset.');
+    }
 }
 
+/**
+ * Retornar path dos datasets
+ */
+function getDatasetDir(): string {
+    const WORKSPACE_DIR = workspace.rootPath;
+    let datasetDir: string = '';
+    fs.readdirSync(WORKSPACE_DIR).forEach(dir => {
+        if (dir == 'datasets') {
+            datasetDir = WORKSPACE_DIR + "\\" + dir;
+        }
+    });
+    if (datasetDir == '') {
+        fs.mkdirSync(WORKSPACE_DIR + "\\datasets");
+        datasetDir = WORKSPACE_DIR + "\\datasets";
+    }
+    return datasetDir;
+}
+
+/**
+ * Retornar a implementação do dataset
+ * @param server Server Config
+ * @param dataset Nome do Dataset
+ */
+function loadDataset(server: any, dataset: string) {
+    if (server) {
+        const url = `${server.address}:${server.port}/webdesk/ECMDatasetService?wsdl`;
+        const args = { companyId: server.company, username: server.user, password: server.pass, name: dataset };
+        return new Promise((accept, reject) => {
+            soap.createClient(url, function (err, client) {
+                client.loadDataset(args, function (err, result) {
+                    if (err) {
+                        accept(null);
+                    } else {
+                        accept(result);
+                    }
+                });
+            });
+        });
+    }
+    return new Promise<boolean>((resolve, reject) => {
+        return null;
+    });
+}
+
+/**
+ * Retorna todos os datasets do ambiente
+ * @param server Server Config
+ */
 function getDatasets(server: any) {
     if (server) {
         const url = `${server.address}:${server.port}/webdesk/ECMDatasetService?wsdl`;
