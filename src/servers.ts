@@ -251,7 +251,7 @@ export class ServersExplorer {
                 currentPanel.reveal();
             } else {
                 currentPanel = vscode.window.createWebviewPanel("vs-fluig.add-server",
-                    "Novo Servidor",
+                    "Adicionar Novo Servidor",
                     vscode.ViewColumn.One,
                     {
                         enableScripts: true,

@@ -17,7 +17,8 @@
 		"javascript"
 	],
 	"engines": {
-		"vscode": "^1.38.0"
+		"vscode": "^1.29.0",
+		"node": "^8.9.3"
 	},
 	"categories": [
 		"Programming Languages",
