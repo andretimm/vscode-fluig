@@ -246,7 +246,7 @@ export class ServersExplorer {
 
         let currentPanel: vscode.WebviewPanel | undefined = undefined;
 
-        vscode.commands.registerCommand("vs-fluig.add-server", () => {
+        context.subscriptions.push(vscode.commands.registerCommand("vs-fluig.add-server", () => {
             if (currentPanel) {
                 currentPanel.reveal();
             } else {
@@ -289,7 +289,7 @@ export class ServersExplorer {
                     context.subscriptions
                 );
             }
-        });
+        }));
 
         //Renderiza a view
         function getWebViewContent(context: any) {
