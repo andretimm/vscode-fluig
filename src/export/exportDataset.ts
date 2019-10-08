@@ -7,7 +7,7 @@ const soap = require('soap');
 
 export async function exportDataset(context: any, files: any) {
     let editor: vscode.TextEditor | undefined;
-    let fileList: string[] = [];
+    let fileList: any[] = [];
     if (context == undefined) {//Identifica quando vem do atalho 
         editor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -26,7 +26,7 @@ export async function exportDataset(context: any, files: any) {
         if (fileList.length > 1) {
             vscode.window.showErrorMessage("Selecionae apenas um dataset por vez!");
         } else {
-            const datasetDetail = await newDatasetDetails(context, fileList[0].name);            
+            const datasetDetail = await newDatasetDetails(context, fileList[0].name);
             const content = fs.readFileSync(fileList[0].path, 'utf8');
             if (datasetDetail.isNew) {
                 addDataset(server, datasetDetail.title, datasetDetail.description, content).then((data) => {
@@ -34,7 +34,7 @@ export async function exportDataset(context: any, files: any) {
                 }).catch((err) => {
                     vscode.window.showErrorMessage("Erro ao exportar o Dataset " + datasetDetail.title);
                 });
-            } else {                
+            } else {
                 updateDataset(server, datasetDetail.title, datasetDetail.description, content).then((data) => {
                     vscode.window.showInformationMessage(`Dataset ${datasetDetail.title} exportado com sucesso!`);
                 }).catch((err) => {
@@ -58,11 +58,11 @@ function addDataset(server: any, title: string, description: string, content: st
     const url = `${server.address}:${server.port}/webdesk/ECMDatasetService?wsdl`;
     const args = { companyId: server.company, username: server.user, password: server.pass, name: title, description: description, impl: content };
     return new Promise((accept, reject) => {
-        soap.createClient(url, function (err, client) {
-            client.addDataset(args, function (err, result) {
-                if (err) {                    
+        soap.createClient(url, function (err: any, client: any) {
+            client.addDataset(args, function (err: any, result: any) {
+                if (err) {
                     accept(false);
-                } else {                    
+                } else {
                     accept(true);
                 }
             });
@@ -81,8 +81,8 @@ function updateDataset(server: any, title: string, description: string, content:
     const url = `${server.address}:${server.port}/webdesk/ECMDatasetService?wsdl`;
     const args = { companyId: server.company, username: server.user, password: server.pass, name: title, description: description, impl: content };
     return new Promise((accept, reject) => {
-        soap.createClient(url, function (err, client) {
-            client.updateDataset(args, function (err, result) {
+        soap.createClient(url, function (err: any, client: any) {
+            client.updateDataset(args, function (err: any, result: any) {
                 if (err) {
                     accept(false);
                 } else {
@@ -105,8 +105,8 @@ function alreadyExists(dataset: string, server: any) {
         const url = `${server.address}:${server.port}/webdesk/ECMDatasetService?wsdl`;
         const args = { companyId: server.company, username: server.user, password: server.pass, name: dataset };
         return new Promise((accept, reject) => {
-            soap.createClient(url, function (err, client) {
-                client.loadDataset(args, function (err, result) {
+            soap.createClient(url, function (err: any, client: any) {
+                client.loadDataset(args, function (err: any, result: any) {
                     if (err) {
                         accept(false);
                     } else {

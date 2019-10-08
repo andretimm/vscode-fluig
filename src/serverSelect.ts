@@ -15,7 +15,7 @@ export async function serverSelect(context: ExtensionContext, serverParam: any) 
         password: string;
     }
 
-    const servers: QuickPickItem[] = serversConfig.configurations.map(element => ({
+    const servers: QuickPickItem[] = serversConfig.configurations.map((element: any) => ({
         detail: element.id,
         label: element.name,
         description: `${element.address}:${element.port}`
@@ -59,7 +59,7 @@ export async function serverSelect(context: ExtensionContext, serverParam: any) 
 
     async function main() {
         const state = await collectInputs();
-        const server = Utils.getServerById((typeof state.server !== 'string') ? (state.server.detail ? state.server.detail : "") : state.server, serversConfig);
+        const server: any = Utils.getServerById((typeof state.server !== 'string') ? (state.server.detail ? state.server.detail : "") : state.server, serversConfig);
         if (server) {
             server.label = server.name; //FIX: quebra-galho necessário para a árvore de servidores                    
             authenticate(server);

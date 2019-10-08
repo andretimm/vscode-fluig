@@ -72,11 +72,7 @@ export default class Utils {
 
             let serversJson = Utils.getServerConfigFile();
 
-            fs.writeFileSync(serversJson, JSON.stringify(sampleServer, null, "\t"), (err) => {
-                if (err) {
-                    console.error(err);
-                }
-            });
+            fs.writeFileSync(serversJson, JSON.stringify(sampleServer, null, "\t"));
         }
     }
     /**
@@ -96,11 +92,7 @@ export default class Utils {
 	 */
     static persistServersInfo(JSONServerInfo: any) {
         let fs = require('fs');
-        fs.writeFileSync(Utils.getServerConfigFile(), JSON.stringify(JSONServerInfo, null, "\t"), (err) => {
-            if (err) {
-                console.error(err);
-            }
-        });
+        fs.writeFileSync(Utils.getServerConfigFile(), JSON.stringify(JSONServerInfo, null, "\t"));
     }
     /**
 	 * Deleta o servidor logado por ultimo do servers.json
@@ -111,7 +103,7 @@ export default class Utils {
         if (allConfigs.configurations) {
             const configs = allConfigs.configurations;
 
-            configs.forEach(element => {
+            configs.forEach((element: any) => {
                 if (element.id === id) {
                     const index = configs.indexOf(element, 0);
                     configs.splice(index, 1);
@@ -130,7 +122,7 @@ export default class Utils {
         if (allConfigs.configurations) {
             const configs = allConfigs.configurations;
 
-            configs.forEach(element => {
+            configs.forEach((element: any) => {
                 if (element.id === id) {
                     /*const index = configs.indexOf(element, 0);
                     configs.splice(index, 1);
@@ -218,11 +210,7 @@ export default class Utils {
 
                 let launchJson = Utils.getLaunchConfigFile();
 
-                fs.writeFileSync(launchJson, JSON.stringify(sampleLaunch, null, "\t"), (err) => {
-                    if (err) {
-                        console.error(err);
-                    }
-                });
+                fs.writeFileSync(launchJson, JSON.stringify(sampleLaunch, null, "\t"));
             }
 
         }
@@ -246,7 +234,7 @@ export default class Utils {
             return result;
         }
         const serverConfig = Utils.getServersConfig();
-        serverConfig.configurations.forEach(element => {
+        serverConfig.configurations.forEach((element: any) => {
             if (element.id === id) {
                 element.name = newName;
                 Utils.persistServersInfo(serverConfig);
@@ -265,7 +253,7 @@ export default class Utils {
     static saveSelectServer(id: string, name: string, environment: string) {
         const servers = Utils.getServersConfig();
 
-        servers.configurations.forEach(element => {
+        servers.configurations.forEach((element: any) => {
             if (element.id === id) {
                 if (element.environments === undefined) {
                     element.environments = [environment];
@@ -295,7 +283,7 @@ export default class Utils {
         let server;
         if (serversConfig.configurations) {
             const configs = serversConfig.configurations;
-            configs.forEach(element => {
+            configs.forEach((element: any) => {
                 if (element.id === id) {
                     server = element;
                     if (server.environments === undefined) {

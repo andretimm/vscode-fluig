@@ -37,7 +37,7 @@ export class ServerItemProvider implements vscode.TreeDataProvider<ServerItem | 
         return element;
     }
 
-    getChildren(element?: ServerItem): Thenable<ServerItem[] | EnvSection[]> {
+    getChildren(element?: any): Thenable<ServerItem[] | EnvSection[]> {
         if (element) {
             if (element.environments) {
                 return Promise.resolve(element.environments);
@@ -125,10 +125,10 @@ export class ServerItemProvider implements vscode.TreeDataProvider<ServerItem | 
         };
         const listServer = new Array<ServerItem>();
 
-        serverConfig.configurations.forEach(element => {
+        serverConfig.configurations.forEach((element: any) => {
             let environmentsServer = new Array<EnvSection>();
             if (element.environments) {
-                element.environments.forEach(environment => {
+                element.environments.forEach((environment: any) => {
                     const env = new EnvSection(environment, element.name, vscode.TreeItemCollapsibleState.None,
                         { command: 'vs-fluig.selectEnvironment', title: '', arguments: [environment] }, environment);
                     environmentsServer.push(env);
@@ -219,7 +219,7 @@ export class ServersExplorer {
         vscode.commands.registerCommand('vs-fluig.connect-server', (serverItem: ServerItem) => {
             let ix = treeDataProvider.localServerItems.indexOf(serverItem);
             if (ix >= 0) {
-                authenticate(serverItem);                
+                authenticate(serverItem);
             }
         });
 
@@ -270,7 +270,7 @@ export class ServersExplorer {
                 );
 
                 currentPanel.webview.onDidReceiveMessage(
-                    message => {                        
+                    message => {
                         if (message.serverName &&
                             message.serverHost &&
                             message.serverPort &&
@@ -328,18 +328,20 @@ export class ServersExplorer {
  */
 export async function authenticate(serverItem: ServerItem) {
     const serversConfig = Utils.getServersConfig();
-    const server = Utils.getServerById(serverItem.id, serversConfig);
+    const server: any = Utils.getServerById(serverItem.id, serversConfig);
     try {
-        const fluigVersion = await axios.get(`${server.address}:${server.port}/ecm/api/rest/ecm/studioWorkflowRest/version?username=${server.user}&password=${server.pass}`);
-        if (fluigVersion.status == 200 && fluigVersion.data) {
-            Utils.saveSelectServer(serverItem.id, serverItem.label, fluigVersion.data);
-            if (treeDataProvider !== undefined) {
-                connectedServerItem = serverItem;
-                connectedServerItem.currentEnvironment = fluigVersion.data;
-                treeDataProvider.refresh();
+        if (server) {
+            const fluigVersion = await axios.get(`${server.address}:${server.port}/ecm/api/rest/ecm/studioWorkflowRest/version?username=${server.user}&password=${server.pass}`);
+            if (fluigVersion.status == 200 && fluigVersion.data) {
+                Utils.saveSelectServer(serverItem.id, serverItem.label, fluigVersion.data);
+                if (treeDataProvider !== undefined) {
+                    connectedServerItem = serverItem;
+                    connectedServerItem.currentEnvironment = fluigVersion.data;
+                    treeDataProvider.refresh();
+                }
+            } else {
+                vscode.window.showErrorMessage("Erro ao autenticar no servidor!");
             }
-        } else {
-            vscode.window.showErrorMessage("Erro ao autenticar no servidor!");
         }
     } catch (error) {
         vscode.window.showErrorMessage("Erro ao autenticar no servidor!");

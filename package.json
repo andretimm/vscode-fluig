@@ -1,5 +1,6 @@
 {
 	"name": "vs-fluig",
+	"publisher": "vs-fluig",
 	"displayName": "VS Code for Fluig",
 	"description": "Extensão para Fluig",
 	"version": "0.0.1",

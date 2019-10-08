@@ -28,7 +28,7 @@ export async function importDataset(context: ExtensionContext) {
  * Retornar path dos datasets
  */
 function getDatasetDir(): string {
-    const WORKSPACE_DIR = workspace.rootPath;
+    const WORKSPACE_DIR: any = workspace.rootPath;
     let datasetDir: string = '';
     fs.readdirSync(WORKSPACE_DIR).forEach(dir => {
         if (dir == 'datasets') {
@@ -52,8 +52,8 @@ function loadDataset(server: any, dataset: string) {
         const url = `${server.address}:${server.port}/webdesk/ECMDatasetService?wsdl`;
         const args = { companyId: server.company, username: server.user, password: server.pass, name: dataset };
         return new Promise((accept, reject) => {
-            soap.createClient(url, function (err, client) {
-                client.loadDataset(args, function (err, result) {
+            soap.createClient(url, function (err: any, client: any) {
+                client.loadDataset(args, function (err: any, result: any) {
                     if (err) {
                         accept(null);
                     } else {
@@ -77,8 +77,8 @@ function getDatasets(server: any) {
         const url = `${server.address}:${server.port}/webdesk/ECMDatasetService?wsdl`;
         const args = { companyId: server.company, username: server.user, password: server.pass };
         return new Promise((accept, reject) => {
-            soap.createClient(url, function (err, client) {
-                client.getAvailableDatasets(args, function (err, result) {
+            soap.createClient(url, function (err: any, client: any) {
+                client.getAvailableDatasets(args, function (err: any, result: any) {
                     if (err) {
                         accept(null);
                     } else {
@@ -102,7 +102,7 @@ async function selectDataset(context: ExtensionContext) {
     let allDatasets: QuickPickItem[] = [{ label: '' }];
 
     interface State {
-        dataset: QuickPickItem | string;
+        dataset: QuickPickItem | string;     
     }
 
     async function collectInputs() {
@@ -145,8 +145,9 @@ async function selectDataset(context: ExtensionContext) {
         const serversConfig = Utils.getServersConfig();
         const currentServer = Utils.getCurrentServer();
         const server = Utils.getServerById(currentServer.id, serversConfig);
-        const datasets = await getDatasets(server);
-        allDatasets = datasets.datasets.item.map(element => ({
+        let datasets: any = [];
+        datasets = await getDatasets(server);
+        allDatasets = datasets.datasets.item.map((element: any) => ({
             label: element.$value
         }));
         return await collectInputs();
