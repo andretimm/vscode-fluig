@@ -27,17 +27,20 @@ export async function exportDataset(context: any, files: any) {
             vscode.window.showErrorMessage("Selecionae apenas um dataset por vez!");
         } else {
             const datasetDetail = await newDatasetDetails(context, fileList[0].name);
-            const existdataset = await alreadyExists(datasetDetail.title, server);
-            if (!existdataset) {
-                console.log("n existe");
-                const content = fs.readFileSync(fileList[0].path, 'utf8');
+            console.log(datasetDetail.isNew);
+            const content = fs.readFileSync(fileList[0].path, 'utf8');
+            if (datasetDetail.isNew) {
                 addDataset(server, datasetDetail.title, datasetDetail.description, content).then((data) => {
-                    vscode.window.showInformationMessage(`Dataset ${datasetDetail.title} exportato com sucesso!`);
+                    vscode.window.showInformationMessage(`Dataset ${datasetDetail.title} exportado com sucesso!`);
                 }).catch((err) => {
                     vscode.window.showErrorMessage("Erro ao exportar o Dataset " + datasetDetail.title);
                 });
-            } else {
-                vscode.window.showErrorMessage("Já existe um dataset com o nome de " + datasetDetail.title);
+            } else {                
+                updateDataset(server, datasetDetail.title, datasetDetail.description, content).then((data) => {
+                    vscode.window.showInformationMessage(`Dataset ${datasetDetail.title} exportado com sucesso!`);
+                }).catch((err) => {
+                    vscode.window.showErrorMessage("Erro ao exportar o Dataset " + datasetDetail.title);
+                });
             }
         }
     } else {
@@ -58,17 +61,40 @@ function addDataset(server: any, title: string, description: string, content: st
     return new Promise((accept, reject) => {
         soap.createClient(url, function (err, client) {
             client.addDataset(args, function (err, result) {
-                if (err) {
-                    console.log(err);
+                if (err) {                    
                     accept(false);
-                } else {
-                    console.log(result);
+                } else {                    
                     accept(true);
                 }
             });
         });
     })
 }
+
+/**
+ * Atualiza dataset
+ * @param server Servidor atual
+ * @param title Nome Dataset
+ * @param description Descrição do Dataset
+ * @param content Conteudo do DatasetF 
+ */
+function updateDataset(server: any, title: string, description: string, content: string) {
+    const url = `${server.address}:${server.port}/webdesk/ECMDatasetService?wsdl`;
+    const args = { companyId: server.company, username: server.user, password: server.pass, name: title, description: description, impl: content };
+    return new Promise((accept, reject) => {
+        soap.createClient(url, function (err, client) {
+            client.updateDataset(args, function (err, result) {
+                if (err) {
+                    accept(false);
+                } else {
+                    accept(true);
+                }
+            });
+        });
+    })
+}
+
+
 
 /**
  * Verifica se ja existe um dataset com este nome
@@ -98,10 +124,14 @@ function alreadyExists(dataset: string, server: any) {
 
 async function newDatasetDetails(context: vscode.ExtensionContext, name: string) {
     const TITLE = "Novo Dataset";
+    const serversConfig = Utils.getServersConfig();
+    const currentServer = Utils.getCurrentServer();
+    const server = Utils.getServerById(currentServer.id, serversConfig);
 
     interface State {
         title: string;
         description: string;
+        isNew: boolean;
         step: number;
         totalSteps: number;
     }
@@ -130,6 +160,12 @@ async function newDatasetDetails(context: vscode.ExtensionContext, name: string)
             password: false
         });
 
+        const existdataset = await alreadyExists(state.title, server)
+        if (!existdataset) {
+            state.isNew = true;
+        } else {
+            state.isNew = false;
+        }
         return (input: MultiStepInput) => inputDescription(input, state);
     }
 
