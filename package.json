@@ -3,7 +3,7 @@
 	"publisher": "vs-fluig",
 	"displayName": "VS Code for Fluig",
 	"description": "Extensão para Fluig",
-	"version": "0.3.0",
+	"version": "0.2.0",
 	"icon": "resources/logo.png",
 	"author": {
 		"name": "Andre Timm",
@@ -17,7 +17,7 @@
 		"javascript"
 	],
 	"engines": {
-		"vscode": "^1.29.0",
+		"vscode": "^1.38.0",
 		"node": "^8.9.3"
 	},
 	"categories": [
