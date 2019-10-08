@@ -9,7 +9,7 @@ export async function importDataset(context: ExtensionContext) {
     const serversConfig = Utils.getServersConfig();
     const currentServer = Utils.getCurrentServer();
     const server = Utils.getServerById(currentServer.id, serversConfig);
-    const datasetSelected = await selectDataset(context);
+    const datasetSelected: any = await selectDataset(context);
     //TODO : Valiar se tem mais de uma workspace aberta workspace.workspaceFolders
     const datasetDir = getDatasetDir();
     const loadedDataset: any = await loadDataset(server, datasetSelected.dataset.label);
@@ -102,7 +102,7 @@ async function selectDataset(context: ExtensionContext) {
     let allDatasets: QuickPickItem[] = [{ label: '' }];
 
     interface State {
-        dataset: QuickPickItem | string;     
+        dataset: QuickPickItem | string;
     }
 
     async function collectInputs() {

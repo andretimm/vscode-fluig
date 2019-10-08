@@ -46,7 +46,7 @@ export class ServerItemProvider implements vscode.TreeDataProvider<ServerItem | 
                 const servers = Utils.getServersConfig();
                 const listOfEnvironments = servers.configurations[element.id].environments;
                 if (listOfEnvironments.size > 0) {
-                    treeDataProvider.localServerItems[element.id].environments = listOfEnvironments.map(env => new EnvSection(env, element.label, vscode.TreeItemCollapsibleState.None, {
+                    treeDataProvider.localServerItems[element.id].environments = listOfEnvironments.map((env: any) => new EnvSection(env, element.label, vscode.TreeItemCollapsibleState.None, {
                         command: 'vs-fluig.selectEnvironment',
                         title: '',
                         arguments: [env]

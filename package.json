@@ -4,6 +4,7 @@
 	"displayName": "VS Code for Fluig",
 	"description": "Extensão para Fluig",
 	"version": "0.0.1",
+	"icon": "resources/logo.png",
 	"author": {
 		"name": "Andre Timm",
 		"email": "andretimm2012@gmail.com"
