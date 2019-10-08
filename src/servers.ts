@@ -293,8 +293,8 @@ export class ServersExplorer {
 
         //Renderiza a view
         function getWebViewContent(context: any) {
-            const htmlPath = vscode.Uri.file(path.join(context.extensionPath, 'src', 'view', 'server', 'addServer.html'));
-            const cssPath = vscode.Uri.file(path.join(context.extensionPath, 'src', 'view', 'server', 'addServer.css'));
+            const htmlPath = vscode.Uri.file(path.join(context.extensionPath, 'resources', 'view', 'server', 'addServer.html'));
+            const cssPath = vscode.Uri.file(path.join(context.extensionPath, 'resources', 'view', 'server', 'addServer.css'));
             const htmlContent = fs.readFileSync(htmlPath.with({ scheme: 'vscode-resource' }).fsPath);
             const cssContent = fs.readFileSync(cssPath.with({ scheme: 'vscode-resource' }).fsPath);
             let runTemplate = compile(htmlContent);

@@ -3,7 +3,7 @@
 	"publisher": "vs-fluig",
 	"displayName": "VS Code for Fluig",
 	"description": "Extensão para Fluig",
-	"version": "0.2.0",
+	"version": "0.2.2",
 	"icon": "resources/logo.png",
 	"author": {
 		"name": "Andre Timm",
@@ -17,8 +17,7 @@
 		"javascript"
 	],
 	"engines": {
-		"vscode": "^1.38.0",
-		"node": "^8.9.3"
+		"vscode": "^1.38.0"
 	},
 	"categories": [
 		"Programming Languages",
@@ -168,13 +167,22 @@
 		"mocha": "^6.1.4",
 		"tslint": "^5.12.1",
 		"typescript": "^3.3.1",
-		"vscode-test": "^1.2.0"
+		"vscode-test": "^1.2.0",
+		"gulp": "^4.0.2",
+		"gulp-sourcemaps": "^2.6.5",
+		"gulp-tslint": "^8.1.4",
+		"gulp-typescript": "^5.0.1",
+		"gulp-util": "^3.0.8",
+		"vsce": "^1.66.0",
+		"vscode-nls-dev": "^3.3.1",
+		"del": "^4.1.1"
 	},
 	"dependencies": {
 		"axios": "^0.19.0",
 		"soap": "^0.29.0",
 		"strip-json-comments": "^3.0.1",
-		"template-literal": "^1.0.3"
+		"template-literal": "^1.0.3",
+		"vscode-nls": "^4.1.1"
 	},
 	"servers": {
 		"path": ".vscode/servers.json"
