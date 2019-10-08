@@ -213,7 +213,7 @@ export class ServersExplorer {
 
         //Evento ao selecionar servidor
         vscode.commands.registerCommand("vs-fluig.selectEnvironment", (item: vscode.TreeItem) => {
-            console.log(item);
+            //TODO
         });
 
         vscode.commands.registerCommand('vs-fluig.connect-server', (serverItem: ServerItem) => {
@@ -270,8 +270,7 @@ export class ServersExplorer {
                 );
 
                 currentPanel.webview.onDidReceiveMessage(
-                    message => {
-                        console.log(message.serverName);
+                    message => {                        
                         if (message.serverName &&
                             message.serverHost &&
                             message.serverPort &&

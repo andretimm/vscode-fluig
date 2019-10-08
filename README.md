@@ -23,8 +23,6 @@ Este é um projeto não oficial, desenvolvido para facilitar o uso do visual cod
 
 ## Importar e Exportar Datasets
 
-##### ! No momento é possivel apenas exportar um novo dataset.
-
 * Selecione seu servidor `default`, que sera o servidor ativo para as importações/exportações
 * Clique com o botão direito do mouse para mostrar as opções. (Para mostrar a opção de exportar clique em cima do arquivo que deseja exportar)
 
@@ -36,7 +34,7 @@ Este é um projeto não oficial, desenvolvido para facilitar o uso do visual cod
 
 ### Exportar
 
-* Selecione o dataset que deseja exportar
+* Selecione o dataset que deseja exportar, caso queria exportar o arquivo aberto no editor utilize o atalho `ctrl + f9` ou `cmd + f9` para macOS
 * Digite o `nome` do dataset e em seguida sua `descrição`
 
 ![Export Dataset](prints/exportar.gif)

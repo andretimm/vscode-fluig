@@ -26,8 +26,7 @@ export async function exportDataset(context: any, files: any) {
         if (fileList.length > 1) {
             vscode.window.showErrorMessage("Selecionae apenas um dataset por vez!");
         } else {
-            const datasetDetail = await newDatasetDetails(context, fileList[0].name);
-            console.log(datasetDetail.isNew);
+            const datasetDetail = await newDatasetDetails(context, fileList[0].name);            
             const content = fs.readFileSync(fileList[0].path, 'utf8');
             if (datasetDetail.isNew) {
                 addDataset(server, datasetDetail.title, datasetDetail.description, content).then((data) => {

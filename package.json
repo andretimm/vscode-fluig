@@ -1,14 +1,34 @@
 {
 	"name": "vs-fluig",
-	"displayName": "vs-fluig",
-	"description": "vs-fluig",
+	"displayName": "VS Code for Fluig",
+	"description": "Extensão para Fluig",
 	"version": "0.0.1",
+	"author": {
+		"name": "Andre Timm",
+		"email": "andretimm2012@gmail.com"
+	},
+	"license": "MIT",
+	"keywords": [
+		"fluig",
+		"totvs",
+		"dataset",
+		"javascript"
+	],
 	"engines": {
 		"vscode": "^1.38.0"
 	},
 	"categories": [
-		"Other"
+		"Programming Languages",
+		"Snippets",
+		"Formatters"
 	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/andretimm/vscode-fluig.git"
+	},
+	"bugs": {
+		"url": "https://github.com/andretimm/vscode-fluig.git"
+	},
 	"activationEvents": [
 		"onCommand:vs-fluig.add-server",
 		"onCommand:vs-fluig.delete-server",
@@ -59,7 +79,7 @@
 				"command": "vs-fluig.export-dataset",
 				"title": "Exportar Dataset"
 			}
-		],		
+		],
 		"keybindings": [
 			{
 				"command": "vs-fluig.export-dataset",
@@ -90,13 +110,7 @@
 			]
 		},
 		"menus": {
-			"explorer/context": [
-				{
-					"when": "explorerResourceIsFolder",
-					"command": "vs-fluig.export-form",
-					"alt": "vs-fluig.export-form",
-					"group": "fluigExport@1"
-				},
+			"explorer/context": [				
 				{
 					"when": "!explorerResourceIsFolder",
 					"command": "vs-fluig.export-dataset",
@@ -158,5 +172,8 @@
 		"soap": "^0.29.0",
 		"strip-json-comments": "^3.0.1",
 		"template-literal": "^1.0.3"
+	},
+	"servers": {
+		"path": ".vscode/servers.json"
 	}
 }
