@@ -32,9 +32,13 @@ export function activate(context: vscode.ExtensionContext) {
 		updateStatusBarItem(undefined);
 	}
 
-	//Exportar dataset
+	//Exportar/Importar dataset
 	context.subscriptions.push(commands.registerCommand('vs-fluig.export-dataset', (args, files) => exportDataset(args, files)));
 	context.subscriptions.push(commands.registerCommand('vs-fluig.import-dataset', () => importDataset(context)));
+
+	context.subscriptions.push(commands.registerCommand('vs-fluig.import-form', () =>
+		console.log("Import Form")
+	));
 
 	let viewServer = new ServersExplorer(context);
 	if (!viewServer) {

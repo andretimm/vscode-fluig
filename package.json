@@ -80,6 +80,10 @@
 			{
 				"command": "vs-fluig.export-dataset",
 				"title": "Exportar Dataset"
+			},
+			{
+				"command": "vs-fluig.import-form",
+				"title": "Importar Formulário"
 			}
 		],
 		"keybindings": [
@@ -122,6 +126,11 @@
 				{
 					"command": "vs-fluig.import-dataset",
 					"alt": "vs-fluig.import-dataset",
+					"group": "fluigImport@1"
+				},
+				{
+					"command": "vs-fluig.import-form",
+					"alt": "vs-fluig.import-form",
 					"group": "fluigImport@2"
 				}
 			],
