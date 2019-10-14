@@ -82,6 +82,12 @@
 				"title": "Exportar Dataset"
 			}
 		],
+		"snippets": [
+			{
+				"language": "javascript",
+				"path": "./snippets/js/snippets.json"
+			}
+		],
 		"keybindings": [
 			{
 				"command": "vs-fluig.export-dataset",

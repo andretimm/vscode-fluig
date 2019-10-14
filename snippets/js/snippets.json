@@ -1,0 +1,25 @@
+{
+    "dsasync": {
+        "prefix": "dsasync",
+        "body": [
+            "var callback = ({",
+            "\tsuccess: function (data) {",
+            "\t\tif (data != undefined && data.values.length > 0) {",
+            "\t\t\tfor (var i = 0; i < data.values.length; i++) {",
+            "\t\t\t\tconsole.log(\"data.values[i]\");",
+            "\t\t\t}",
+            "\t\t} else {",
+            "\t\t\t//Empty",
+            "\t\t}",
+            "\t},",
+            "\terror: function (jqXHR, textStatus, errorThrown) {",
+            "\t\t//Erro",
+            "\t}",
+            "});",
+            "var c1 = DatasetFactory.createConstraint('${1:constraint}', '${2:initialValue}', '${3:finalValue}', ConstraintType.MUST);",
+            "var constraints = new Array(c1);",
+            "var dataset = DatasetFactory.getDataset('${4:datasetName}', null, constraints, null, callback);"
+        ],
+        "description": "Chamar dataset Assincrono"
+    }
+}
