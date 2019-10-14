@@ -1,6 +1,6 @@
 {
-    "dsasync": {
-        "prefix": "dsasync",
+    "fdsasync": {
+        "prefix": "fdsasync",
         "body": [
             "var callback = ({",
             "\tsuccess: function (data) {",
@@ -21,5 +21,29 @@
             "var dataset = DatasetFactory.getDataset('${4:datasetName}', null, constraints, null, callback);"
         ],
         "description": "Chamar dataset Assincrono"
+    },
+    "fmodal": {
+        "prefix": "fmodal",
+        "body": [
+            "var myModal = FLUIGC.modal({",
+            "\ttitle: '${1:title}',",
+            "\tcontent: '<h1>${2:Content}</h1>',",
+            "\tid: 'fluig-modal',",
+            "\tactions: [{",
+            "\t\t'label': '${3:Save}',",
+            "\t\t'bind': 'data-save',",
+            "\t}, {",
+            "\t\t'label': '${4:Close}',",
+            "\t\t'autoClose': true,",
+            "\t}]",
+            "}, function (err, data) {",
+            "\tif (err) {",
+            "\t\t// do error handling",
+            "\t} else {",
+            "\t\t// do something with data",
+            "\t}",
+            "});"
+        ],
+        "description": "Criar modal do Fluig"
     }
 }
