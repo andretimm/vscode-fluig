@@ -3,7 +3,7 @@
 	"publisher": "vs-fluig",
 	"displayName": "VS Code for Fluig",
 	"description": "Extensão para Fluig",
-	"version": "0.2.2",
+	"version": "0.3.0",
 	"icon": "resources/logo.png",
 	"author": {
 		"name": "Andre Timm",
