@@ -45,5 +45,12 @@
             "});"
         ],
         "description": "Criar modal do Fluig"
+    },
+    "fload": {
+        "prefix": "fload",
+        "body": [
+            "var load = FLUIGC.loading(${1:window})"
+        ],
+        "description": "Criar um load, podendo ser na tela toda usando o window ou passando um elemento específico ex.: #header"
     }
 }

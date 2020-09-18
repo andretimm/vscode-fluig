@@ -5,6 +5,8 @@ import { exportDataset } from './export/exportDataset';
 import Utils from './utils';
 import { serverSelect } from './serverSelect';
 import { importDataset } from './import/importDataset';
+import { FluigCCompletionProvider } from './autoComplete/fluigc';
+import { FluigToastCompletionProvider } from './autoComplete/components';
 
 // barra de status
 export let fluigStatusBarItem: vscode.StatusBarItem;
@@ -35,6 +37,9 @@ export function activate(context: vscode.ExtensionContext) {
 	//Exportar dataset
 	context.subscriptions.push(commands.registerCommand('vs-fluig.export-dataset', (args, files) => exportDataset(args, files)));
 	context.subscriptions.push(commands.registerCommand('vs-fluig.import-dataset', () => importDataset(context)));
+
+	context.subscriptions.push(vscode.languages.registerCompletionItemProvider('javascript', new FluigCCompletionProvider()));
+	context.subscriptions.push(vscode.languages.registerCompletionItemProvider('javascript', new FluigToastCompletionProvider(), '.'));
 
 	let viewServer = new ServersExplorer(context);
 	if (!viewServer) {
